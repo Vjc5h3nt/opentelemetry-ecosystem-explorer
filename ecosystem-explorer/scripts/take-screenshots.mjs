@@ -18,8 +18,17 @@ const DETAIL_NAME = "spring-webmvc-6.0";
 async function startServer() {
   return new Promise((resolve) => {
     const server = http.createServer((req, res) => {
-      const urlPath = req.url.split("?")[0];
-      let filePath = path.join(DIST_DIR, urlPath);
+      const urlPath = decodeURIComponent(req.url.split("?")[0]);
+
+      // Resolve the requested path and ensure it stays within DIST_DIR
+      const resolvedPath = path.resolve(DIST_DIR, urlPath.replace(/^\/+/, ""));
+      if (!resolvedPath.startsWith(DIST_DIR)) {
+        res.writeHead(403);
+        res.end("Forbidden");
+        return;
+      }
+
+      let filePath = resolvedPath;
 
       // Serve index.html for the root path
       if (urlPath === "/") {
@@ -70,18 +79,23 @@ async function takeScreenshots() {
     await page.setViewportSize({ width: 1800, height: 1200 });
 
     // Block external requests that can cause timeouts
+    const BLOCKED_HOSTS = new Set([
+      "googletagmanager.com",
+      "google-analytics.com",
+      "fonts.googleapis.com",
+      "fonts.gstatic.com",
+    ]);
     await page.route("**/*", (route) => {
-      const url = route.request().url();
-      if (
-        url.includes("googletagmanager.com") ||
-        url.includes("google-analytics.com") ||
-        url.includes("fonts.googleapis.com") ||
-        url.includes("fonts.gstatic.com")
-      ) {
-        route.abort();
-      } else {
-        route.continue();
+      try {
+        const hostname = new URL(route.request().url()).hostname;
+        if (BLOCKED_HOSTS.has(hostname) || [...BLOCKED_HOSTS].some((h) => hostname.endsWith(`.${h}`))) {
+          route.abort();
+          return;
+        }
+      } catch {
+        // If URL parsing fails, allow the request
       }
+      route.continue();
     });
 
     logTime("Browser ready");
