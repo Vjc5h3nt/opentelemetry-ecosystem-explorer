@@ -542,3 +542,5 @@ When adding new UI components:
 4. Verify accessibility (keyboard nav, ARIA labels, contrast)
 5. Test responsive behavior across viewport sizes
 6. Document any new patterns in this file
+7. Verify dark mode rendering with the theme system
+8. Check color contrast ratios meet WCAG AA standards
