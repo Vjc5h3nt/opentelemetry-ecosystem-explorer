@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Info,
   Activity,
@@ -54,6 +54,7 @@ function buildSourceUrl(sourcePath: string): string {
 export function InstrumentationDetailPage() {
   const { version, name } = useParams<{ version: string; name: string }>();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("details");
 
   const { data: versionsData, loading: versionsLoading } = useVersions();
 
@@ -233,10 +234,10 @@ export function InstrumentationDetailPage() {
             />
           </div>
 
-          <Tabs defaultValue="details" className="relative z-10">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="relative z-10">
             <div className="px-6 pt-4 pb-0">
               <SegmentedTabList
-                defaultValue="details"
+                value={activeTab}
                 tabs={[
                   {
                     value: "details",
@@ -257,7 +258,7 @@ export function InstrumentationDetailPage() {
               />
             </div>
 
-            <TabsContent value="details" className="p-6">
+            <TabsContent value="details" className="mt-0 p-6">
               <div className="space-y-8">
                 {/* Links & Resources Section */}
                 {(instrumentation.library_link || instrumentation.source_path) && (
@@ -460,7 +461,7 @@ export function InstrumentationDetailPage() {
               </div>
             </TabsContent>
 
-            <TabsContent value="telemetry" className="p-6">
+            <TabsContent value="telemetry" className="mt-0 p-6">
               {instrumentation.telemetry && instrumentation.telemetry.length > 0 ? (
                 <TelemetrySection telemetry={instrumentation.telemetry} />
               ) : (
@@ -478,7 +479,7 @@ export function InstrumentationDetailPage() {
               )}
             </TabsContent>
 
-            <TabsContent value="configuration" className="p-6">
+            <TabsContent value="configuration" className="mt-0 p-6">
               {instrumentation.configurations && instrumentation.configurations.length > 0 ? (
                 <div className="grid gap-4 md:grid-cols-2">
                   {instrumentation.configurations.map((config) => (
