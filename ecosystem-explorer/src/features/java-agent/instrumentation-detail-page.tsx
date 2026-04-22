@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { BackButton } from "@/components/ui/back-button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { SegmentedTabList } from "./components/segmented-tabs";
+import { SegmentedTabList } from "@/components/ui/segmented-tabs";
 import { GlowBadge } from "@/components/ui/glow-badge";
 import { DetailCard } from "@/components/ui/detail-card";
 import { SectionHeader } from "@/components/ui/section-header";

@@ -16,7 +16,7 @@
 import { useMemo, useState } from "react";
 import { BackButton } from "@/components/ui/back-button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { SegmentedTabList } from "../components/segmented-tabs";
+import { SegmentedTabList } from "@/components/ui/segmented-tabs";
 import { VersionSelector } from "@/features/java-agent/components/version-selector";
 import {
   useConfigVersions,

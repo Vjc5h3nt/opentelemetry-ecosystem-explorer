@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { useState, useRef, useLayoutEffect, useCallback, useEffect, type JSX } from "react";
+import { useState, useRef, useLayoutEffect, useCallback, useEffect, type ReactNode } from "react";
 import * as RadixTabs from "@radix-ui/react-tabs";
 
 interface TabItem {
   value: string;
   label: string;
-  icon?: JSX.Element;
+  icon?: ReactNode;
 }
 
 interface SegmentedTabListProps {
@@ -78,11 +78,9 @@ export function SegmentedTabList({ tabs, value }: SegmentedTabListProps) {
           ref={(el) => {
             buttonRefs.current[tab.value] = el;
           }}
-          className={`relative z-10 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 ${
-            value === tab.value ? "text-primary" : "text-muted-foreground hover:text-foreground"
-          }`}
+          className="relative z-10 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 data-[state=active]:text-primary data-[state=inactive]:text-muted-foreground"
         >
-          {tab.icon && tab.icon}
+          {tab.icon}
           {tab.label}
         </RadixTabs.Trigger>
       ))}
